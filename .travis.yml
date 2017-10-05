@@ -3,7 +3,7 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 2.0.0
-install:
-  - dotnet restore
 script:
+  - cd DiscordChatBot
+  - dotnet restore
   - dotnet build ./DiscordChatBot/
