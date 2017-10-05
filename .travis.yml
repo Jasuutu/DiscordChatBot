@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+solution: DiscordChatBot/DiscordChatBot.sln
+install:
+	- sudo apt-get install gtk-sharp2
+	- nuget restore DiscordChatBot/DiscordChatBot.sln
