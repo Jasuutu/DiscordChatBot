@@ -3,4 +3,4 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 2.0.0
-solution: DiscordChatbot.sln
+solution: DiscordChatBot\DiscordChatbot.sln
