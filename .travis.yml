@@ -5,6 +5,3 @@ dist: trusty
 solution: DiscordChatBot/DiscordChatbot.sln
 script:
   - dotnet restore
-install:
-  - sudo apt-get install -y gtk-sharp2
-  - nuget restore DiscordChatbot/DiscordChatbot.sln
