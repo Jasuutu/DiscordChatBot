@@ -1,6 +1,6 @@
 language: csharp
-dist: trusty
-sudo: required
 mono: none
 dotnet: 2.0.0
-solution: DiscordChatBot\DiscordChatbot.sln
+script:
+  - dotnet restore
+  - dotnet build ./DiscordChatBot/
