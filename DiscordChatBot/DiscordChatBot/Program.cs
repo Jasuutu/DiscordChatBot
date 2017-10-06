@@ -10,7 +10,7 @@ namespace DiscordChatBot
     {
         Random rng = new Random();
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
@@ -34,26 +34,10 @@ namespace DiscordChatBot
             return Task.CompletedTask;
         }
 
-        private async Task MessageReceived(SocketMessage message)
+        private async Task MessageReceived(IMessage message)
         {
             if (message.Author.IsBot)
                 return;
-
-            if (message.Author.Username == "Alriightyman")
-            {
-                int number = rng.Next(1, 6);
-                if (number == 1)
-                {
-                    await message.Channel.SendMessageAsync("You got unlucky and rolled a 1.");
-                    await message.Channel.SendMessageAsync("I do not respond to people who abuse bots...");
-                    return;
-                }
-                else
-                {
-                    await message.Channel.SendMessageAsync($"You got luckey and rolled a {number}.");
-                    await message.Channel.SendMessageAsync($"I'll listen to you this time.");
-                }
-            }
 
             if (message.Content.Contains("intellitype"))
             {
@@ -72,7 +56,7 @@ namespace DiscordChatBot
             }
         }
 
-        private async Task RollDice(SocketMessage message)
+        private async Task RollDice(IMessage message)
         {
             string[] splitMessage = message.Content.Split(new char[] { ' ', 'd' }, StringSplitOptions.RemoveEmptyEntries);
 
