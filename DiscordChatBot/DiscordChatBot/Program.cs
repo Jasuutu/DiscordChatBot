@@ -10,17 +10,17 @@ namespace DiscordChatBot
     {
         Random rng = new Random();
 
+        // ReSharper disable once UnusedParameter.Local
         private static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
             var client = new DiscordSocketClient();
-
             client.Log += Log;
             client.MessageReceived += MessageReceived;
 
-            var token = File.ReadAllText("C:/Dev/DiscordChatBot/DiscordChatBot/token.txt"); ; // Remember to keep this private!
+            var token = File.ReadAllText(Directory.GetCurrentDirectory() + "\\token.txt"); // Remember to keep this private!
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
 
@@ -58,7 +58,7 @@ namespace DiscordChatBot
 
         private async Task RollDice(IMessage message)
         {
-            string[] splitMessage = message.Content.Split(new char[] { ' ', 'd' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] splitMessage = message.Content.Split(new[] { ' ', 'd' }, StringSplitOptions.RemoveEmptyEntries);
 
             int dice = int.Parse(splitMessage[1]);
             int value = int.Parse(splitMessage[2]);
