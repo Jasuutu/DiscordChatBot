@@ -3,11 +3,8 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 2.0.0
-install:
-  - cd DiscordChatBot
-  - nuget restore DiscordChatBot.sln
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
+  - cd DiscordChatBot
   - dotnet restore
   - dotnet build ./DiscordChatBot/
-  - dotnet build ./DiscordChatBotTests/
+  - dotnet test ./DiscordChatBotTests/
