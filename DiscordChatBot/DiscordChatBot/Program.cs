@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
 
 namespace DiscordChatBot
 {
     class Program
     {
-        Random rng = new Random();
+        private YouTubeService youtubeService;
 
         // ReSharper disable once UnusedParameter.Local
         private static void Main(string[] args)
@@ -23,6 +28,14 @@ namespace DiscordChatBot
             var token = File.ReadAllText(Directory.GetCurrentDirectory() + "\\token.txt"); // Remember to keep this private!
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
+
+            youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                ApiKey = File.ReadAllText(Directory.GetCurrentDirectory() + "\\youtubekey.txt"),
+                ApplicationName = GetType().ToString()
+            });
+
+            Console.WriteLine(this.youtubeService.ApiKey);
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
@@ -50,44 +63,45 @@ namespace DiscordChatBot
                 await message.Channel.SendMessageAsync("Pong!");
             }
 
-            else if (message.Content.StartsWith("!roll"))
+            else if (MessageParser.MessageStatsWith(message, "!roll"))
             {
                 await RollDice(message);
             }
 
-            else if (message.Content.StartsWith("!github"))
+            else if (MessageParser.MessageStatsWith(message, "!github"))
             {
                 await message.Channel.SendMessageAsync("If you wish to see the source or propose a new idea for me," +
                                                        "go to https://github.com/Jasuutu/DiscordChatBot");
             }
+
+            else if (MessageParser.MessageStatsWith(message, "!youtube"))
+            {
+                await YoutubeSearch(message);
+            }
+        }
+
+        private async Task YoutubeSearch(IMessage message)
+        {
+            SearchResource.ListRequest searchlistRequest = youtubeService.Search.List("snippet");
+            searchlistRequest.Q = MessageParser.RemoveTriggerWord(message.Content); //Search term
+            searchlistRequest.MaxResults = 5;
+
+            SearchListResponse searchListResponse = await searchlistRequest.ExecuteAsync();
+
+            List<string> videos = (from response 
+                                   in searchListResponse.Items
+                                   where response.Id.Kind == "youtube#video"
+                                   select $"{response.Id.VideoId}").ToList();
+
+            await message.Channel.SendMessageAsync($"https://www.youtube.com/watch?v={videos.FirstOrDefault()}");
         }
 
         private async Task RollDice(IMessage message)
         {
-            string[] splitMessage = message.Content.Split(new[] { ' ', 'd' }, StringSplitOptions.RemoveEmptyEntries);
+            Tuple<string, int> result = MessageParser.ParseDiceMessage(message.Content, new[] {' ', 'd'});
 
-            int dice = int.Parse(splitMessage[1]);
-            int value = int.Parse(splitMessage[2]);
-
-            string resultNumbers = string.Empty;
-            int result = 0;
-            for (int i = 0; i < dice; i++)
-            {
-                int tempResult = rng.Next(1, value);
-
-                if (i == dice - 1)
-                {
-                    resultNumbers += $"{tempResult}";
-                }
-                else
-                {
-                    resultNumbers += $"{tempResult} + ";
-                }
-                result += tempResult;
-            }
-
-            await message.Channel.SendMessageAsync($"The dice rolled are: {resultNumbers}");
-            await message.Channel.SendMessageAsync($"The total result is {result}");
+            await message.Channel.SendMessageAsync($"The dice rolled are: {result.Item1}");
+            await message.Channel.SendMessageAsync($"The total result is {result.Item2}");
         }
     }
 }
