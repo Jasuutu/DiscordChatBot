@@ -7,3 +7,6 @@ script:
   - cd DiscordChatBot
   - dotnet restore
   - dotnet test ./DiscordChatBotTests/
+deploy:
+  provider: azure_web_app
+  skip_cleanup: true
