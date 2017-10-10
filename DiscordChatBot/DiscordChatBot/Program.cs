@@ -63,18 +63,18 @@ namespace DiscordChatBot
                 await message.Channel.SendMessageAsync("Pong!");
             }
 
-            else if (MessageParser.MessageStatsWith(message, "!roll"))
+            else if (MessageParser.MessageStatsWith(message.Content, "!roll"))
             {
                 await RollDice(message);
             }
 
-            else if (MessageParser.MessageStatsWith(message, "!github"))
+            else if (MessageParser.MessageStatsWith(message.Content, "!github"))
             {
                 await message.Channel.SendMessageAsync("If you wish to see the source or propose a new idea for me," +
                                                        "go to https://github.com/Jasuutu/DiscordChatBot");
             }
 
-            else if (MessageParser.MessageStatsWith(message, "!youtube"))
+            else if (MessageParser.MessageStatsWith(message.Content, "!youtube"))
             {
                 await YoutubeSearch(message);
             }

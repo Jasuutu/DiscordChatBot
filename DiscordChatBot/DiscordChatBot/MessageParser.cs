@@ -6,9 +6,9 @@ namespace DiscordChatBot
 {
     public class MessageParser
     {
-        public static bool MessageStatsWith(IMessage message, string checkingString)
+        public static bool MessageStatsWith(string message, string checkingString)
         {
-            return message.Content.StartsWith(checkingString);
+            return message.StartsWith(checkingString);
         }
 
         public static string RemoveTriggerWord(string message)
