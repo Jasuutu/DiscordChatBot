@@ -54,6 +54,12 @@ namespace DiscordChatBot
             {
                 await RollDice(message);
             }
+
+            else if (message.Content.StartsWith("!github"))
+            {
+                await message.Channel.SendMessageAsync("If you wish to see the source or propose a new idea for me," +
+                                                       "go to https://github.com/Jasuutu/DiscordChatBot");
+            }
         }
 
         private async Task RollDice(IMessage message)
