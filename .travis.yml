@@ -6,5 +6,4 @@ dotnet: 2.0.0
 script:
   - cd DiscordChatBot
   - dotnet restore
-  - dotnet build ./DiscordChatBot/
   - dotnet test ./DiscordChatBotTests/
