@@ -1,0 +1,11 @@
+.dockerignore
+.gitignore
+.travis.yml
+LICENSE
+.git
+DiscordChatBot
+DiscordChatBot\DiscordChatBot.sln
+DiscordChatBot\DiscordChatBot
+DiscordChatBot\DiscordChatBot\DiscordChatBot.csproj
+DiscordChatBot\DiscordChatBot\DockerFile
+DiscordChatBot\DiscordChatBot\Program.cs
