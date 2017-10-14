@@ -73,12 +73,11 @@ namespace DiscordChatBot
 
         private void BuildServices()
         {
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer
+            this.youtubeService = new YouTubeService(new BaseClientService.Initializer
             {
                 ApiKey = File.ReadAllText(Directory.GetCurrentDirectory() + "\\youtubekey.txt"),
                 ApplicationName = this.GetType().ToString()
             });
-            this.youtubeService = youtubeService;
         }
 
         private Task Log(LogMessage msg)
