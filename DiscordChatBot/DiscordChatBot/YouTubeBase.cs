@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -9,12 +10,19 @@ namespace DiscordChatBot
 {
     public class YouTubeBase : ModuleBase<SocketCommandContext>
     {
+        private readonly YouTubeService youTubeService;
+
+        public YouTubeBase(YouTubeService service)
+        {
+            youTubeService = service;
+        }
+
         [Command("youtube")]
         [Summary("Finds a single video based on the search term")]
-        public async Task YoutubeVideoSearch()
+        public async Task YoutubeVideoSearch([Remainder] [Summary("String to search YouTube on")] string message)
         {
-            SearchResource.ListRequest searchlistRequest = youtubeService.Search.List("snippet");
-            searchlistRequest.Q = MessageParser.RemoveTriggerWord(message.Content); //Search term
+            SearchResource.ListRequest searchlistRequest = youTubeService.Search.List("snippet");
+            searchlistRequest.Q = MessageParser.RemoveTriggerWord(message); //Search term
             searchlistRequest.MaxResults = 5;
 
             SearchListResponse searchListResponse = await searchlistRequest.ExecuteAsync();
@@ -24,7 +32,7 @@ namespace DiscordChatBot
                 where response.Id.Kind == "youtube#video"
                 select $"{response.Id.VideoId}").ToList();
 
-            await message.Channel.SendMessageAsync($"https://www.youtube.com/watch?v={videos.FirstOrDefault()}");
+            await ReplyAsync($"https://www.youtube.com/watch?v={videos.FirstOrDefault()}");
         }
     }
 }

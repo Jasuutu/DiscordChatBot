@@ -30,14 +30,17 @@ namespace DiscordChatBot
             client = new DiscordSocketClient();
             this.commands = new CommandService();
 
+            BuildServices();
+
             this.serivces = new ServiceCollection()
                 .AddSingleton(client)
                 .AddSingleton(commands)
+                .AddSingleton(youtubeService)
                 .BuildServiceProvider();
 
             await InstallCommandsAsync();
 
-            string token = File.ReadAllText(Directory.GetCurrentDirectory() + "\\token.txt"); // Remember to keep this private!
+            var token = File.ReadAllText(Directory.GetCurrentDirectory() + "\\token.txt"); // Remember to keep this private!
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
 
@@ -70,6 +73,16 @@ namespace DiscordChatBot
             }
         }
 
+        private void BuildServices()
+        {
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer
+            {
+                ApiKey = File.ReadAllText(Directory.GetCurrentDirectory() + "\\youtubekey.txt"),
+                ApplicationName = this.GetType().ToString()
+            });
+            this.youtubeService = youtubeService;
+        }
+
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
@@ -96,27 +109,6 @@ namespace DiscordChatBot
             {
                 await RollDice(message);
             }
-
-            else if (MessageParser.MessageStatsWith(message.Content, "!youtube"))
-            {
-                await YoutubeSearch(message);
-            }
-        }
-
-        private async Task YoutubeSearch(IMessage message)
-        {
-            SearchResource.ListRequest searchlistRequest = youtubeService.Search.List("snippet");
-            searchlistRequest.Q = MessageParser.RemoveTriggerWord(message.Content); //Search term
-            searchlistRequest.MaxResults = 5;
-
-            SearchListResponse searchListResponse = await searchlistRequest.ExecuteAsync();
-
-            List<string> videos = (from response 
-                                   in searchListResponse.Items
-                                   where response.Id.Kind == "youtube#video"
-                                   select $"{response.Id.VideoId}").ToList();
-
-            await message.Channel.SendMessageAsync($"https://www.youtube.com/watch?v={videos.FirstOrDefault()}");
         }
 
         private async Task RollDice(IMessage message)
