@@ -8,11 +8,11 @@ using Google.Apis.YouTube.v3.Data;
 
 namespace DiscordChatBot
 {
-    public class YouTubeBase : ModuleBase<SocketCommandContext>
+    public class YouTubeModule : ModuleBase<SocketCommandContext>
     {
         private readonly YouTubeService youTubeService;
 
-        public YouTubeBase(YouTubeService service)
+        public YouTubeModule(YouTubeService service)
         {
             youTubeService = service;
         }
