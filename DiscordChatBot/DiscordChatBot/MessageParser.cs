@@ -22,8 +22,8 @@ namespace DiscordChatBot
         Random rng = new Random();
         string[] splitMessage = message.Split(deliniaters, StringSplitOptions.RemoveEmptyEntries);
 
-            int dice = int.Parse(splitMessage[1]);
-            int value = int.Parse(splitMessage[2]);
+            int dice = int.Parse(splitMessage[0]);
+            int value = int.Parse(splitMessage[1]);
 
             string resultNumbers = string.Empty;
             var result = 0;

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscordChatBot
 {
+    // ReSharper disable once ArrangeTypeModifiers
     class Program
     {
         private CommandService commands;
@@ -84,36 +85,6 @@ namespace DiscordChatBot
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
-        }
-
-        private async Task MessageReceived(IMessage message)
-        {
-            if (message.Author.IsBot)
-                return;
-
-            if (message.Content.Contains("intellitype"))
-            {
-                await message.Channel.SendMessageAsync($"No need to bring up a touchy subject...");
-                return;
-            }
-
-            if (message.Content == "!ping")
-            {
-                await message.Channel.SendMessageAsync("Pong!");
-            }
-
-            else if (MessageParser.MessageStatsWith(message.Content, "!roll"))
-            {
-                await RollDice(message);
-            }
-        }
-
-        private async Task RollDice(IMessage message)
-        {
-            Tuple<string, int> result = MessageParser.ParseDiceMessage(message.Content, new[] {' ', 'd'});
-
-            await message.Channel.SendMessageAsync($"The dice rolled are: {result.Item1}");
-            await message.Channel.SendMessageAsync($"The total result is {result.Item2}");
         }
     }
 }
