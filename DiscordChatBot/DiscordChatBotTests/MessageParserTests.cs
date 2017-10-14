@@ -23,7 +23,7 @@ namespace DiscordChatBotTests
         [Test]
         public void ParseDiceMessageTest()
         {
-            var result = MessageParser.ParseDiceMessage("!roll 1d8", new[] {' ', 'd'});
+            var result = MessageParser.ParseDiceMessage("1d8", new[] {' ', 'd'});
             Convert.ToInt32(result.Item1).Should().BeInRange(1, 8);
             result.Item2.Should().BeInRange(1, 8);
         }
