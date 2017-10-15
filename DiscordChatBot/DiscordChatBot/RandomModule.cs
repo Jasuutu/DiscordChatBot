@@ -28,6 +28,13 @@ namespace DiscordChatBot
             await RollDice(message);
         }
 
+        [Command("github")]
+        [Summary("Links to this repository")]
+        public async Task GithubCommand()
+        {
+            await ReplyAsync("https://github.com/Jasuutu/DiscordChatBot");
+        }
+
         private async Task RollDice(string message)
         {
             var result = MessageParser.ParseDiceMessage(message, new[] { ' ', 'd' });
